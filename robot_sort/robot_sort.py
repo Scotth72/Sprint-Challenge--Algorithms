@@ -94,20 +94,50 @@ class SortingRobot:
         """
         return self._light == "ON"
 
+    # helper to position robot to swap item
+
+    def shift_right(self):
+        # robot will not be holding item
+        self.swap_item()
+        self.move_right()
+
+        if self.compare_item() == 1:
+            self.set_light_on()
+            self.swap_item()
+            self.move_left()
+            self.swap_item()
+            self.move_right()
+
+        else:
+            # get to orginal position
+            self.move_left()
+            self.swap_item()
+            self.move_right()
+
     def sort(self):
         """
         Sort the robot's list.
         """
         # Fill this out
+        # compare and swap items until the end and stop
+        # going left and repeating will cause recursion
         while self.can_move_right() == True:
-            self.move_right()
-            if self.compare_item() == -1:
-                self.swap_item()
+            self.shift_right()
 
-            if self.
+        if self.can_move_right() == False:
+            while self.can_move_left():
+                self.move_left()
+
+        if self.light_is_on() == True:
+            self.set_light_off()
+            print(self._list)
+            print(self._light)
+            print(self._item)
+            self.sort()
 
         else:
             print(self._list)
+            print(self._light)
             print(self._item)
             return "Sort complete"
 
